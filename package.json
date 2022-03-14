@@ -1,0 +1,16 @@
+{
+    "name": "zoom-zendesk",
+    "version": "1.0.0",
+    "description": "",
+    "main": "dist/index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "cd dist && nodemon index.js",
+        "watch-ts": "tsc -w"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "nodemon": "^2.0.15"
+    }
+}
