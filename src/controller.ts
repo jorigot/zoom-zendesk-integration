@@ -6,6 +6,7 @@ class Controller {
 
     public index(req: Request, res: Response) {
         const zoom_body = req.body;
+        console.log('[ZOOM BODY]', zoom_body);
         return res.json({text: 'success!', body: zoom_body});
     }
 

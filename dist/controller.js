@@ -5,6 +5,7 @@ var Controller = /** @class */ (function () {
     }
     Controller.prototype.index = function (req, res) {
         var zoom_body = req.body;
+        console.log('[ZOOM BODY]', zoom_body);
         return res.json({ text: 'success!', body: zoom_body });
     };
     Controller.prototype.test = function (req, res) {
