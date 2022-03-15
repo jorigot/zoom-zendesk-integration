@@ -7,6 +7,10 @@ class Controller {
     public index(req: Request, res: Response) {
         return res.json({text: 'success!'});
     }
+
+    public test(req: Request, res: Response) {
+        return res.status(200).json({message: 'Hola mundo!'});
+    }
 }
 
 export const controller = new Controller();
