@@ -6,6 +6,9 @@ var Controller = /** @class */ (function () {
     Controller.prototype.index = function (req, res) {
         return res.json({ text: 'success!' });
     };
+    Controller.prototype.test = function (req, res) {
+        return res.status(200).json({ message: 'Hola mundo!' });
+    };
     return Controller;
 }());
 exports.controller = new Controller();

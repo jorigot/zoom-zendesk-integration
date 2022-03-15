@@ -9,6 +9,7 @@ var Routes = /** @class */ (function () {
     }
     Routes.prototype.config = function () {
         this.router.post('/', controller_1.controller.index);
+        this.router.get('/', controller_1.controller.test);
     };
     return Routes;
 }());
