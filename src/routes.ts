@@ -9,6 +9,7 @@ class Routes {
 
     config(): void {
         this.router.post('/', controller.index);
+        this.router.get('/', controller.test);
     }
 }
 
