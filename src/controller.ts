@@ -8,11 +8,17 @@ class Controller {
 
     public index(req: Request, res: Response) {
         try{
+            //    Get body from zoom json
             const zoom_body = req.body;
             console.log('[ZOOM BODY]', zoom_body);
+            
+            //    Send body to readZoomBody method
             this.readZoomBody(zoom_body);
+
+            //    Return response with status 200 and a success message
             return res.status(200).json({text: 'success!', body: zoom_body});
         }catch(err) {
+            //    Return response with status 500 and the error message
             console.log('[ERROR]', err);
             return res.status(500).json({message: 'Operation was not successful.'});
         }
