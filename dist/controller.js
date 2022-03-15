@@ -4,7 +4,8 @@ var Controller = /** @class */ (function () {
     function Controller() {
     }
     Controller.prototype.index = function (req, res) {
-        return res.json({ text: 'success!' });
+        var zoom_body = req.body;
+        return res.json({ text: 'success!', body: zoom_body });
     };
     Controller.prototype.test = function (req, res) {
         return res.status(200).json({ message: 'Hola mundo!' });

@@ -5,7 +5,8 @@ class Controller {
     constructor() {}
 
     public index(req: Request, res: Response) {
-        return res.json({text: 'success!'});
+        const zoom_body = req.body;
+        return res.json({text: 'success!', body: zoom_body});
     }
 
     public test(req: Request, res: Response) {
