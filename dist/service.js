@@ -54,11 +54,11 @@ var ZendeskService = /** @class */ (function () {
     }
     ZendeskService.prototype.readZoomBody = function (body) {
         return __awaiter(this, void 0, void 0, function () {
-            var caller, callee, ticket_data;
+            var caller, callee, ticket_data, ticket_data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!(body.event === 'phone.callee_answered')) return [3 /*break*/, 2];
+                        if (!(body.event === 'phone.callee_answered')) return [3 /*break*/, 3];
                         if (!(utils_1.registered_phone_numbers.includes(body.payload.object.callee.phone_number) || utils_1.registered_extension_numbers.includes(body.payload.object.callee.extension_number))) return [3 /*break*/, 2];
                         caller = body.payload.object.caller.phone_number;
                         callee = body.payload.object.callee.phone_number;
@@ -68,7 +68,15 @@ var ZendeskService = /** @class */ (function () {
                     case 1:
                         _a.sent();
                         _a.label = 2;
-                    case 2: return [2 /*return*/, [true, null]];
+                    case 2: return [3 /*break*/, 5];
+                    case 3:
+                        console.log('[CALL NOT ANSWERED]');
+                        ticket_data = this.createAnsweredCallTicket('none', 'none');
+                        return [4 /*yield*/, this.uploadTicket(ticket_data)];
+                    case 4:
+                        _a.sent();
+                        _a.label = 5;
+                    case 5: return [2 /*return*/, [true, null]];
                 }
             });
         });

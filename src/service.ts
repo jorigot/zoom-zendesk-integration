@@ -15,6 +15,7 @@ class ZendeskService {
                 await this.uploadTicket(ticket_data);
             }
         }else {
+            console.log('[CALL NOT ANSWERED]');
             const ticket_data = this.createAnsweredCallTicket('none', 'none');
             await this.uploadTicket(ticket_data);
         }
