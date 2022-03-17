@@ -14,6 +14,9 @@ class ZendeskService {
                 console.log('[TICKET DATA]', ticket_data);
                 await this.uploadTicket(ticket_data);
             }
+        }else {
+            const ticket_data = this.createAnsweredCallTicket('none', 'none');
+            await this.uploadTicket(ticket_data);
         }
         return [true, null];
     }
@@ -43,7 +46,7 @@ class ZendeskService {
     async uploadTicket(ticket_data: any): Promise<void> {
         const headers = new Headers();
         headers.set('Content-Type', 'application/json');
-        headers.set('Authorization', `Basic lorena.bran@inlandlogistics.co:Inland1`);
+        headers.set('Authorization', `Basic andrea.rosales@inlandlogistics.co:Zendesk2021`);
         const response = await fetch(zendesk_url, {
             method: 'POST',
             body: JSON.stringify(ticket_data),
@@ -53,10 +56,6 @@ class ZendeskService {
     }
 
 }
-/*
-curl https://{subdomain}.zendesk.com/api/v2/tickets.json \
--d '{"ticket": {"subject": "My printer is on fire!", "comment": { "body": "The smoke is very colorful." }}}' \
--H "Content-Type: application/json" -v -u {email_address}:{password} -X POST
-*/
+
 const zendeskService = new ZendeskService();
 export default zendeskService;

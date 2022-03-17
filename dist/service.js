@@ -102,7 +102,7 @@ var ZendeskService = /** @class */ (function () {
                     case 0:
                         headers = new node_fetch_1.Headers();
                         headers.set('Content-Type', 'application/json');
-                        headers.set('Authorization', "Basic lorena.bran@inlandlogistics.co:Inland1");
+                        headers.set('Authorization', "Basic andrea.rosales@inlandlogistics.co:Zendesk2021");
                         return [4 /*yield*/, node_fetch_1.default(utils_1.zendesk_url, {
                                 method: 'POST',
                                 body: JSON.stringify(ticket_data),
@@ -118,10 +118,5 @@ var ZendeskService = /** @class */ (function () {
     };
     return ZendeskService;
 }());
-/*
-curl https://{subdomain}.zendesk.com/api/v2/tickets.json \
--d '{"ticket": {"subject": "My printer is on fire!", "comment": { "body": "The smoke is very colorful." }}}' \
--H "Content-Type: application/json" -v -u {email_address}:{password} -X POST
-*/
 var zendeskService = new ZendeskService();
 exports.default = zendeskService;
