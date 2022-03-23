@@ -11,16 +11,26 @@ class ZendeskService {
                 const caller = body.payload.object.caller.phone_number;
                 const callee = body.payload.object.callee.phone_number;
                 const ticket_data = this.createAnsweredCallTicket(caller, callee);
-                console.log('[TICKET DATA]', ticket_data);
-                await this.uploadTicket(ticket_data);
+                const response = await this.uploadTicket(ticket_data);
+                
+                console.log('[RESPONSE]', response);
+                if (response.status !== 201) {
+                    return [null, response];
+                }
             }
-        }else if (body.event === 'phone.callee_missed_a_phone_call') {
+        }else if (body.event === 'phone.callee_missed') {
 
             console.log('[CALL NOT ANSWERED]');
             const caller = body.payload.object.caller.phone_number;
             const callee = body.payload.object.callee.phone_number;
             const ticket_data = this.createMissedCallTicket(caller, callee);
-            await this.uploadTicket(ticket_data);
+            const response = await this.uploadTicket(ticket_data);
+            console.log('[RESPONSE]', response);
+            if (response.status !== 201) {
+                return [null, response];
+            }
+        }else if (body.event === 'phone.') {
+
         }
         return [true, null];
     }
@@ -68,17 +78,43 @@ class ZendeskService {
         };
         return ticket_data;
     }
+    
+    createVoiceMailTicket(caller: any, callee: any): any {
+        const new_date = moment().format('MM-DD-YYYY HH:mm');
+        const ticket_data = {
+            ticket: {
+                subject: `[TEST] Voicemail from ${caller} to ${callee}`,
+                priority: 'normal',
+                requester: {
+                    name: caller,
+                    email: `${caller}@inlandlogistics.co`
+                },
+                comment: {
+                    body: `Call from ${caller} at ${new_date} to ${callee}`
+                },
+                custom_fields: {
+                    id: '4415218538651',
+                    value: caller
+                }
+            }
+        };
+        return ticket_data;
+    }
 
-    async uploadTicket(ticket_data: any): Promise<void> {
-        const headers = new Headers();
-        headers.set('Content-Type', 'application/json');
-        headers.set('Authorization', `Basic andrea.rosales@inlandlogistics.co:Zendesk2021`);
+    async uploadTicket(ticket_data: any): Promise<any> {
+        /*headers.set('Content-Type', 'application/json');
+        headers.set('Authorization', `Basic andrea.rosales@inlandlogistics.co:Zendesk2021`);*/
+        const email = 'andrea.rosales@inlandlogistics.co';
+        const key = 'Zendesk2021';
         const response = await fetch(zendesk_url, {
+            headers: new Headers({
+                "Content-Type": 'application/json',
+                "Authorization": 'Basic ' + Buffer.from(`${email}:${key}`).toString('base64')
+            }),
             method: 'POST',
             body: JSON.stringify(ticket_data),
-            headers: headers
         });
-        console.log('[RESPONSE]', response);
+        return response;
     }
 
 }

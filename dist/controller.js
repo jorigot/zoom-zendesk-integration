@@ -56,8 +56,7 @@ var Controller = /** @class */ (function () {
                     case 1:
                         _a = _b.sent(), success = _a[0], error = _a[1];
                         if (error) {
-                            console.log(error);
-                            return [2 /*return*/, res.status(400).json({ message: error })];
+                            return [2 /*return*/, res.status(error.status).json(error)];
                         }
                         //    Return response with status 200 and a success message
                         return [2 /*return*/, res.status(200).json({ text: 'success!', body: zoom_body })];

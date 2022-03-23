@@ -54,7 +54,7 @@ var ZendeskService = /** @class */ (function () {
     }
     ZendeskService.prototype.readZoomBody = function (body) {
         return __awaiter(this, void 0, void 0, function () {
-            var caller, callee, ticket_data, caller, callee, ticket_data;
+            var caller, callee, ticket_data, response, caller, callee, ticket_data, response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -63,23 +63,34 @@ var ZendeskService = /** @class */ (function () {
                         caller = body.payload.object.caller.phone_number;
                         callee = body.payload.object.callee.phone_number;
                         ticket_data = this.createAnsweredCallTicket(caller, callee);
-                        console.log('[TICKET DATA]', ticket_data);
                         return [4 /*yield*/, this.uploadTicket(ticket_data)];
                     case 1:
-                        _a.sent();
+                        response = _a.sent();
+                        console.log('[RESPONSE]', response);
+                        if (response.status !== 201) {
+                            return [2 /*return*/, [null, response]];
+                        }
                         _a.label = 2;
-                    case 2: return [3 /*break*/, 5];
+                    case 2: return [3 /*break*/, 6];
                     case 3:
-                        if (!(body.event === 'phone.callee_missed_a_phone_call')) return [3 /*break*/, 5];
+                        if (!(body.event === 'phone.callee_missed')) return [3 /*break*/, 5];
                         console.log('[CALL NOT ANSWERED]');
                         caller = body.payload.object.caller.phone_number;
                         callee = body.payload.object.callee.phone_number;
                         ticket_data = this.createMissedCallTicket(caller, callee);
                         return [4 /*yield*/, this.uploadTicket(ticket_data)];
                     case 4:
-                        _a.sent();
-                        _a.label = 5;
-                    case 5: return [2 /*return*/, [true, null]];
+                        response = _a.sent();
+                        console.log('[RESPONSE]', response);
+                        if (response.status !== 201) {
+                            return [2 /*return*/, [null, response]];
+                        }
+                        return [3 /*break*/, 6];
+                    case 5:
+                        if (body.event === 'phone.') {
+                        }
+                        _a.label = 6;
+                    case 6: return [2 /*return*/, [true, null]];
                 }
             });
         });
@@ -126,24 +137,46 @@ var ZendeskService = /** @class */ (function () {
         };
         return ticket_data;
     };
+    ZendeskService.prototype.createVoiceMailTicket = function (caller, callee) {
+        var new_date = moment_timezone_1.default().format('MM-DD-YYYY HH:mm');
+        var ticket_data = {
+            ticket: {
+                subject: "[TEST] Voicemail from " + caller + " to " + callee,
+                priority: 'normal',
+                requester: {
+                    name: caller,
+                    email: caller + "@inlandlogistics.co"
+                },
+                comment: {
+                    body: "Call from " + caller + " at " + new_date + " to " + callee
+                },
+                custom_fields: {
+                    id: '4415218538651',
+                    value: caller
+                }
+            }
+        };
+        return ticket_data;
+    };
     ZendeskService.prototype.uploadTicket = function (ticket_data) {
         return __awaiter(this, void 0, void 0, function () {
-            var headers, response;
+            var email, key, response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        headers = new node_fetch_1.Headers();
-                        headers.set('Content-Type', 'application/json');
-                        headers.set('Authorization', "Basic andrea.rosales@inlandlogistics.co:Zendesk2021");
+                        email = 'andrea.rosales@inlandlogistics.co';
+                        key = 'Zendesk2021';
                         return [4 /*yield*/, node_fetch_1.default(utils_1.zendesk_url, {
+                                headers: new node_fetch_1.Headers({
+                                    "Content-Type": 'application/json',
+                                    "Authorization": 'Basic ' + Buffer.from(email + ":" + key).toString('base64')
+                                }),
                                 method: 'POST',
                                 body: JSON.stringify(ticket_data),
-                                headers: headers
                             })];
                     case 1:
                         response = _a.sent();
-                        console.log('[RESPONSE]', response);
-                        return [2 /*return*/];
+                        return [2 /*return*/, response];
                 }
             });
         });

@@ -16,8 +16,7 @@ class Controller {
             const [success, error] = await zendeskService.readZoomBody(zoom_body);
 
             if (error) {
-                console.log(error);
-                return res.status(400).json({message: error});
+                return res.status(error.status).json(error);
             }
             //    Return response with status 200 and a success message
             return res.status(200).json({text: 'success!', body: zoom_body});
