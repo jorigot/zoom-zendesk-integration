@@ -54,23 +54,33 @@ var ZendeskService = /** @class */ (function () {
     }
     ZendeskService.prototype.readZoomBody = function (body) {
         return __awaiter(this, void 0, void 0, function () {
-            var caller, callee, ticket_data, ticket_data;
+            var caller, callee, ticket_data, caller, callee, ticket_data;
             return __generator(this, function (_a) {
-                if (body.event === 'phone.callee_answered') {
-                    if (utils_1.registered_phone_numbers.includes(body.payload.object.callee.phone_number) || utils_1.registered_extension_numbers.includes(body.payload.object.callee.extension_number)) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(body.event === 'phone.callee_answered')) return [3 /*break*/, 3];
+                        if (!(utils_1.registered_phone_numbers.includes(body.payload.object.callee.phone_number) || utils_1.registered_extension_numbers.includes(body.payload.object.callee.extension_number))) return [3 /*break*/, 2];
                         caller = body.payload.object.caller.phone_number;
                         callee = body.payload.object.callee.phone_number;
                         ticket_data = this.createAnsweredCallTicket(caller, callee);
                         console.log('[TICKET DATA]', ticket_data);
-                        //await this.uploadTicket(ticket_data);
-                    }
+                        return [4 /*yield*/, this.uploadTicket(ticket_data)];
+                    case 1:
+                        _a.sent();
+                        _a.label = 2;
+                    case 2: return [3 /*break*/, 5];
+                    case 3:
+                        if (!(body.event === 'phone.callee_missed_a_phone_call')) return [3 /*break*/, 5];
+                        console.log('[CALL NOT ANSWERED]');
+                        caller = body.payload.object.caller.phone_number;
+                        callee = body.payload.object.callee.phone_number;
+                        ticket_data = this.createMissedCallTicket(caller, callee);
+                        return [4 /*yield*/, this.uploadTicket(ticket_data)];
+                    case 4:
+                        _a.sent();
+                        _a.label = 5;
+                    case 5: return [2 /*return*/, [true, null]];
                 }
-                else {
-                    console.log('[CALL NOT ANSWERED]');
-                    ticket_data = this.createAnsweredCallTicket('none', 'none');
-                    //await this.uploadTicket(ticket_data);
-                }
-                return [2 /*return*/, [true, null]];
             });
         });
     };
@@ -78,14 +88,35 @@ var ZendeskService = /** @class */ (function () {
         var new_date = moment_timezone_1.default().format('MM-DD-YYYY HH:mm');
         var ticket_data = {
             ticket: {
-                subject: "[TEST] Call from " + caller,
+                subject: "[TEST] Call from " + caller + " to " + callee,
                 priority: 'normal',
                 requester: {
                     name: caller,
                     email: caller + "@inlandlogistics.co"
                 },
                 comment: {
-                    body: "Call from " + caller + " at " + new_date
+                    body: "Call from " + caller + " at " + new_date + " to " + callee
+                },
+                custom_fields: {
+                    id: '4415218538651',
+                    value: caller
+                }
+            }
+        };
+        return ticket_data;
+    };
+    ZendeskService.prototype.createMissedCallTicket = function (caller, callee) {
+        var new_date = moment_timezone_1.default().format('MM-DD-YYYY HH:mm');
+        var ticket_data = {
+            ticket: {
+                subject: "[TEST] Missed Call from " + caller + " to " + callee,
+                priority: 'normal',
+                requester: {
+                    name: caller,
+                    email: caller + "@inlandlogistics.co"
+                },
+                comment: {
+                    body: "Call from " + caller + " at " + new_date + " to " + callee
                 },
                 custom_fields: {
                     id: '4415218538651',

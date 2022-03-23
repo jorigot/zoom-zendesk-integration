@@ -12,13 +12,15 @@ class ZendeskService {
                 const callee = body.payload.object.callee.phone_number;
                 const ticket_data = this.createAnsweredCallTicket(caller, callee);
                 console.log('[TICKET DATA]', ticket_data);
-                //await this.uploadTicket(ticket_data);
+                await this.uploadTicket(ticket_data);
             }
-        }else {
-            
+        }else if (body.event === 'phone.callee_missed_a_phone_call') {
+
             console.log('[CALL NOT ANSWERED]');
-            const ticket_data = this.createAnsweredCallTicket('none', 'none');
-            //await this.uploadTicket(ticket_data);
+            const caller = body.payload.object.caller.phone_number;
+            const callee = body.payload.object.callee.phone_number;
+            const ticket_data = this.createMissedCallTicket(caller, callee);
+            await this.uploadTicket(ticket_data);
         }
         return [true, null];
     }
@@ -27,14 +29,36 @@ class ZendeskService {
         const new_date = moment().format('MM-DD-YYYY HH:mm');
         const ticket_data = {
             ticket: {
-                subject: `[TEST] Call from ${caller}`,
+                subject: `[TEST] Call from ${caller} to ${callee}`,
                 priority: 'normal',
                 requester: {
                     name: caller,
                     email: `${caller}@inlandlogistics.co`
                 },
                 comment: {
-                    body: `Call from ${caller} at ${new_date}`
+                    body: `Call from ${caller} at ${new_date} to ${callee}`
+                },
+                custom_fields: {
+                    id: '4415218538651',
+                    value: caller
+                }
+            }
+        };
+        return ticket_data;
+    }
+    
+    createMissedCallTicket(caller: any, callee: any): any {
+        const new_date = moment().format('MM-DD-YYYY HH:mm');
+        const ticket_data = {
+            ticket: {
+                subject: `[TEST] Missed Call from ${caller} to ${callee}`,
+                priority: 'normal',
+                requester: {
+                    name: caller,
+                    email: `${caller}@inlandlogistics.co`
+                },
+                comment: {
+                    body: `Call from ${caller} at ${new_date} to ${callee}`
                 },
                 custom_fields: {
                     id: '4415218538651',
