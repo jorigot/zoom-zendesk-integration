@@ -54,7 +54,7 @@ var ZendeskService = /** @class */ (function () {
     }
     ZendeskService.prototype.readZoomBody = function (body) {
         return __awaiter(this, void 0, void 0, function () {
-            var caller, callee, ticket_data, response, caller, callee, ticket_data, response;
+            var caller, callee, ticket_data, response, caller, callee, ticket_data, response, caller, callee, ticket_data, response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -71,7 +71,7 @@ var ZendeskService = /** @class */ (function () {
                             return [2 /*return*/, [null, response]];
                         }
                         _a.label = 2;
-                    case 2: return [3 /*break*/, 6];
+                    case 2: return [3 /*break*/, 7];
                     case 3:
                         if (!(body.event === 'phone.callee_missed')) return [3 /*break*/, 5];
                         console.log('[CALL NOT ANSWERED]');
@@ -85,21 +85,30 @@ var ZendeskService = /** @class */ (function () {
                         if (response.status !== 201) {
                             return [2 /*return*/, [null, response]];
                         }
-                        return [3 /*break*/, 6];
+                        return [3 /*break*/, 7];
                     case 5:
-                        if (body.event === 'phone.') {
+                        if (!(body.event === 'phone.voicemail_received')) return [3 /*break*/, 7];
+                        caller = body.payload.object.caller_number;
+                        callee = body.payload.object.callee_number;
+                        ticket_data = this.createVoiceMailTicket(caller, callee);
+                        return [4 /*yield*/, this.uploadTicket(ticket_data)];
+                    case 6:
+                        response = _a.sent();
+                        console.log('[RESPONSE]', response);
+                        if (response.status !== 201) {
+                            return [2 /*return*/, [null, response]];
                         }
-                        _a.label = 6;
-                    case 6: return [2 /*return*/, [true, null]];
+                        _a.label = 7;
+                    case 7: return [2 /*return*/, [true, null]];
                 }
             });
         });
     };
     ZendeskService.prototype.createAnsweredCallTicket = function (caller, callee) {
-        var new_date = moment_timezone_1.default().format('MM-DD-YYYY HH:mm');
+        var new_date = moment_timezone_1.default().utcOffset(-360).format('MM-DD-YYYY HH:mm');
         var ticket_data = {
             ticket: {
-                subject: "[TEST] Call from " + caller + " to " + callee,
+                subject: "Call from " + caller + " to " + callee,
                 priority: 'normal',
                 requester: {
                     name: caller,
@@ -117,10 +126,10 @@ var ZendeskService = /** @class */ (function () {
         return ticket_data;
     };
     ZendeskService.prototype.createMissedCallTicket = function (caller, callee) {
-        var new_date = moment_timezone_1.default().format('MM-DD-YYYY HH:mm');
+        var new_date = moment_timezone_1.default().utcOffset(-360).format('MM-DD-YYYY HH:mm');
         var ticket_data = {
             ticket: {
-                subject: "[TEST] Missed Call from " + caller + " to " + callee,
+                subject: "Missed Call from " + caller + " to " + callee,
                 priority: 'normal',
                 requester: {
                     name: caller,
@@ -138,10 +147,10 @@ var ZendeskService = /** @class */ (function () {
         return ticket_data;
     };
     ZendeskService.prototype.createVoiceMailTicket = function (caller, callee) {
-        var new_date = moment_timezone_1.default().format('MM-DD-YYYY HH:mm');
+        var new_date = moment_timezone_1.default().utcOffset(-360).format('MM-DD-YYYY HH:mm');
         var ticket_data = {
             ticket: {
-                subject: "[TEST] Voicemail from " + caller + " to " + callee,
+                subject: "Voicemail from " + caller + " to " + callee,
                 priority: 'normal',
                 requester: {
                     name: caller,

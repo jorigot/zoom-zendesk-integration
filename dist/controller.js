@@ -59,7 +59,7 @@ var Controller = /** @class */ (function () {
                             return [2 /*return*/, res.status(error.status).json(error)];
                         }
                         //    Return response with status 200 and a success message
-                        return [2 /*return*/, res.status(200).json({ text: 'success!', body: zoom_body })];
+                        return [2 /*return*/, res.status(200).json({ text: 'success!', zoom_body: zoom_body })];
                     case 2:
                         err_1 = _b.sent();
                         //    Return response with status 500 and the error message

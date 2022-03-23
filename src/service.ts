@@ -29,17 +29,26 @@ class ZendeskService {
             if (response.status !== 201) {
                 return [null, response];
             }
-        }else if (body.event === 'phone.') {
+        }else if (body.event === 'phone.voicemail_received') {
+            //https://marketplace.zoom.us/docs/api-reference/phone/events/#/paths/phone.voicemail_received/post
+            const caller = body.payload.object.caller_number;
+            const callee = body.payload.object.callee_number;
 
+            const ticket_data = this.createVoiceMailTicket(caller, callee);
+            const response = await this.uploadTicket(ticket_data);
+            console.log('[RESPONSE]', response);
+            if (response.status !== 201) {
+                return [null, response];
+            }
         }
         return [true, null];
     }
 
     createAnsweredCallTicket(caller: any, callee: any): any {
-        const new_date = moment().format('MM-DD-YYYY HH:mm');
+        const new_date = moment().utcOffset(-360).format('MM-DD-YYYY HH:mm');
         const ticket_data = {
             ticket: {
-                subject: `[TEST] Call from ${caller} to ${callee}`,
+                subject: `Call from ${caller} to ${callee}`,
                 priority: 'normal',
                 requester: {
                     name: caller,
@@ -58,10 +67,10 @@ class ZendeskService {
     }
     
     createMissedCallTicket(caller: any, callee: any): any {
-        const new_date = moment().format('MM-DD-YYYY HH:mm');
+        const new_date = moment().utcOffset(-360).format('MM-DD-YYYY HH:mm');
         const ticket_data = {
             ticket: {
-                subject: `[TEST] Missed Call from ${caller} to ${callee}`,
+                subject: `Missed Call from ${caller} to ${callee}`,
                 priority: 'normal',
                 requester: {
                     name: caller,
@@ -80,10 +89,10 @@ class ZendeskService {
     }
     
     createVoiceMailTicket(caller: any, callee: any): any {
-        const new_date = moment().format('MM-DD-YYYY HH:mm');
+        const new_date = moment().utcOffset(-360).format('MM-DD-YYYY HH:mm');
         const ticket_data = {
             ticket: {
-                subject: `[TEST] Voicemail from ${caller} to ${callee}`,
+                subject: `Voicemail from ${caller} to ${callee}`,
                 priority: 'normal',
                 requester: {
                     name: caller,
@@ -102,8 +111,6 @@ class ZendeskService {
     }
 
     async uploadTicket(ticket_data: any): Promise<any> {
-        /*headers.set('Content-Type', 'application/json');
-        headers.set('Authorization', `Basic andrea.rosales@inlandlogistics.co:Zendesk2021`);*/
         const email = 'andrea.rosales@inlandlogistics.co';
         const key = 'Zendesk2021';
         const response = await fetch(zendesk_url, {

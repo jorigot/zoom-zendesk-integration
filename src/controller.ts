@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import zendeskService from './service';
+import moment from 'moment-timezone';
 
 class Controller {
 
@@ -19,7 +20,7 @@ class Controller {
                 return res.status(error.status).json(error);
             }
             //    Return response with status 200 and a success message
-            return res.status(200).json({text: 'success!', body: zoom_body});
+            return res.status(200).json({text: 'success!', zoom_body});
         }catch(err) {
             //    Return response with status 500 and the error message
             console.log('[ERROR]', err);
