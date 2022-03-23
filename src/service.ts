@@ -12,12 +12,13 @@ class ZendeskService {
                 const callee = body.payload.object.callee.phone_number;
                 const ticket_data = this.createAnsweredCallTicket(caller, callee);
                 console.log('[TICKET DATA]', ticket_data);
-                await this.uploadTicket(ticket_data);
+                //await this.uploadTicket(ticket_data);
             }
         }else {
+            
             console.log('[CALL NOT ANSWERED]');
             const ticket_data = this.createAnsweredCallTicket('none', 'none');
-            await this.uploadTicket(ticket_data);
+            //await this.uploadTicket(ticket_data);
         }
         return [true, null];
     }
@@ -57,6 +58,15 @@ class ZendeskService {
     }
 
 }
+
+/*
+    Callee ended a phone call
+    Callee answerd a phone call
+    Voicemail is received
+    Caller log is completed
+    Callee log is completed
+    Warn transfer was accepted
+*/
 
 const zendeskService = new ZendeskService();
 export default zendeskService;
