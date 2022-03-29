@@ -136,7 +136,7 @@ var ZendeskService = /** @class */ (function () {
                     email: caller + "@inlandlogistics.co"
                 },
                 comment: {
-                    body: "Call from " + caller + " at " + new_date + " to " + callee
+                    body: "Missed call from " + caller + " to " + callee + " at " + new_date
                 },
                 custom_fields: {
                     id: '4415218538651',
@@ -157,7 +157,7 @@ var ZendeskService = /** @class */ (function () {
                     email: caller + "@inlandlogistics.co"
                 },
                 comment: {
-                    body: "Call from " + caller + " at " + new_date + " to " + callee
+                    body: "Voicemail from " + caller + " to " + callee + " at " + new_date
                 },
                 custom_fields: {
                     id: '4415218538651',
@@ -174,11 +174,11 @@ var ZendeskService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         email = 'andrea.rosales@inlandlogistics.co';
-                        key = 'Zendesk2021';
+                        key = 'XHkCKX82Z1CRccYcqrEtTwkmP4inSYGHszikG6N7';
                         return [4 /*yield*/, node_fetch_1.default(utils_1.zendesk_url, {
                                 headers: new node_fetch_1.Headers({
                                     "Content-Type": 'application/json',
-                                    "Authorization": 'Basic ' + Buffer.from(email + ":" + key).toString('base64')
+                                    "Authorization": 'Basic ' + Buffer.from(email + "/token:" + key).toString('base64')
                                 }),
                                 method: 'POST',
                                 body: JSON.stringify(ticket_data),
@@ -194,6 +194,7 @@ var ZendeskService = /** @class */ (function () {
 }());
 /*
     Callee ended a phone call
+    Callee missed a phone call
     Callee answerd a phone call
     Voicemail is received
     Caller log is completed

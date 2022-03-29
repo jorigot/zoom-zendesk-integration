@@ -77,7 +77,7 @@ class ZendeskService {
                     email: `${caller}@inlandlogistics.co`
                 },
                 comment: {
-                    body: `Call from ${caller} at ${new_date} to ${callee}`
+                    body: `Missed call from ${caller} to ${callee} at ${new_date}`
                 },
                 custom_fields: {
                     id: '4415218538651',
@@ -99,7 +99,7 @@ class ZendeskService {
                     email: `${caller}@inlandlogistics.co`
                 },
                 comment: {
-                    body: `Call from ${caller} at ${new_date} to ${callee}`
+                    body: `Voicemail from ${caller} to ${callee} at ${new_date}`
                 },
                 custom_fields: {
                     id: '4415218538651',
@@ -112,11 +112,11 @@ class ZendeskService {
 
     async uploadTicket(ticket_data: any): Promise<any> {
         const email = 'andrea.rosales@inlandlogistics.co';
-        const key = 'Zendesk2021';
+        const key = 'XHkCKX82Z1CRccYcqrEtTwkmP4inSYGHszikG6N7';
         const response = await fetch(zendesk_url, {
             headers: new Headers({
                 "Content-Type": 'application/json',
-                "Authorization": 'Basic ' + Buffer.from(`${email}:${key}`).toString('base64')
+                "Authorization": 'Basic ' + Buffer.from(`${email}/token:${key}`).toString('base64')
             }),
             method: 'POST',
             body: JSON.stringify(ticket_data),
@@ -128,6 +128,7 @@ class ZendeskService {
 
 /*
     Callee ended a phone call
+    Callee missed a phone call
     Callee answerd a phone call
     Voicemail is received
     Caller log is completed
