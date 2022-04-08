@@ -18,7 +18,7 @@ class ZendeskService {
                     return [null, response];
                 }
             }
-        }else if (body.event === 'phone.callee_missed') {
+        }/*else if (body.event === 'phone.callee_missed') {
 
             console.log('[CALL NOT ANSWERED]');
             const caller = body.payload.object.caller.phone_number;
@@ -40,7 +40,7 @@ class ZendeskService {
             if (response.status !== 201) {
                 return [null, response];
             }
-        }
+        }*/
         return [true, null];
     }
 

@@ -54,11 +54,11 @@ var ZendeskService = /** @class */ (function () {
     }
     ZendeskService.prototype.readZoomBody = function (body) {
         return __awaiter(this, void 0, void 0, function () {
-            var caller, callee, ticket_data, response, caller, callee, ticket_data, response, caller, callee, ticket_data, response;
+            var caller, callee, ticket_data, response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!(body.event === 'phone.callee_answered')) return [3 /*break*/, 3];
+                        if (!(body.event === 'phone.callee_answered')) return [3 /*break*/, 2];
                         if (!(utils_1.registered_phone_numbers.includes(body.payload.object.callee.phone_number) || utils_1.registered_extension_numbers.includes(body.payload.object.callee.extension_number))) return [3 /*break*/, 2];
                         caller = body.payload.object.caller.phone_number;
                         callee = body.payload.object.callee.phone_number;
@@ -71,35 +71,29 @@ var ZendeskService = /** @class */ (function () {
                             return [2 /*return*/, [null, response]];
                         }
                         _a.label = 2;
-                    case 2: return [3 /*break*/, 7];
-                    case 3:
-                        if (!(body.event === 'phone.callee_missed')) return [3 /*break*/, 5];
+                    case 2: /*else if (body.event === 'phone.callee_missed') {
+            
                         console.log('[CALL NOT ANSWERED]');
-                        caller = body.payload.object.caller.phone_number;
-                        callee = body.payload.object.callee.phone_number;
-                        ticket_data = this.createMissedCallTicket(caller, callee);
-                        return [4 /*yield*/, this.uploadTicket(ticket_data)];
-                    case 4:
-                        response = _a.sent();
+                        const caller = body.payload.object.caller.phone_number;
+                        const callee = body.payload.object.callee.phone_number;
+                        const ticket_data = this.createMissedCallTicket(caller, callee);
+                        const response = await this.uploadTicket(ticket_data);
                         console.log('[RESPONSE]', response);
                         if (response.status !== 201) {
-                            return [2 /*return*/, [null, response]];
+                            return [null, response];
                         }
-                        return [3 /*break*/, 7];
-                    case 5:
-                        if (!(body.event === 'phone.voicemail_received')) return [3 /*break*/, 7];
-                        caller = body.payload.object.caller_number;
-                        callee = body.payload.object.callee_number;
-                        ticket_data = this.createVoiceMailTicket(caller, callee);
-                        return [4 /*yield*/, this.uploadTicket(ticket_data)];
-                    case 6:
-                        response = _a.sent();
+                    }else if (body.event === 'phone.voicemail_received') {
+                        //https://marketplace.zoom.us/docs/api-reference/phone/events/#/paths/phone.voicemail_received/post
+                        const caller = body.payload.object.caller_number;
+                        const callee = body.payload.object.callee_number;
+            
+                        const ticket_data = this.createVoiceMailTicket(caller, callee);
+                        const response = await this.uploadTicket(ticket_data);
                         console.log('[RESPONSE]', response);
                         if (response.status !== 201) {
-                            return [2 /*return*/, [null, response]];
+                            return [null, response];
                         }
-                        _a.label = 7;
-                    case 7: return [2 /*return*/, [true, null]];
+                    }*/ return [2 /*return*/, [true, null]];
                 }
             });
         });
